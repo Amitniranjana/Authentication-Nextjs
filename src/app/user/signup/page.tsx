@@ -1,9 +1,10 @@
 "use client";
 import React, { useState, ChangeEvent, FormEvent } from "react";
 // If you are using Next.js, you might want to import Link
- import Link from "next/link";
-
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 export default function SignupPage() {
+    const router = useRouter();
     const [user, setUser] = useState({
         username: "",
         email: "",
@@ -18,18 +19,32 @@ export default function SignupPage() {
         setUser((prev) => ({ ...prev, [name]: value }));
     };
 
-    const onSignup = async (e:FormEvent) => {
-        e.preventDefault(); // Prevents page refresh
+    const onSignup = async (e: FormEvent) => {
+       try{
+ e.preventDefault(); // Prevents page refresh
         setLoading(true);
 
         // Simulate API call
         console.log("Signup Data:", user);
+        const response = await fetch("/api/user/signup", {
+            method: "POST",
+            body: JSON.stringify(user)
 
-        setTimeout(() => {
-            setLoading(false);
-            // Here you would redirect the user or show a success message
-        }, 2000);
+        });
+        const responseData=await response.json();
+console.log(responseData);
+        if (response) {
+            router.push("/user/login")
+        }
+       }
+       catch(err){
+console.log(err)
+       }finally{
+console.log("frontend ka signup code fat gya")
+       }
+
     };
+
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-50">
@@ -114,7 +129,7 @@ export default function SignupPage() {
 
                 <p className="text-center text-sm text-gray-600">
                     Already have an account?{" "}
-                  <Link  href="/user/login"> <span className="font-medium text-blue-600 hover:underline cursor-pointer">
+                    <Link href="/user/login"> <span className="font-medium text-blue-600 hover:underline cursor-pointer">
                         Login here
                     </span> </Link>
                 </p>

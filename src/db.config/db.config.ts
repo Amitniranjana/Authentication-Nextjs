@@ -10,9 +10,10 @@ export default async function connect() {
                 return;
             }
         }
-
+const MONGO_URI = "mongodb+srv://dbUser:N8TPViRJSGkGq0tl@authentication.fvt6pjx.mongodb.net/?appName=Authentication"
+        
         // 2. Connect
-        await mongoose.connect(process.env.MONGODB_URI as string);
+        await mongoose.connect(MONGO_URI);
         const connection = mongoose.connection;
 
         // 3. Listeners (Use 'connected', not 'connect')
@@ -25,9 +26,10 @@ export default async function connect() {
             process.exit(1);
         });
 
-        // Note: Avoid process.exit() on disconnect in serverless apps, 
+        // Note: Avoid process.exit() on disconnect in serverless apps,
         // as it might kill the container unnecessarily.
-        
+        console.log("md connected successfully")
+
     } catch (error) {
         console.log("Something went wrong in connecting to DB");
         console.log(error);

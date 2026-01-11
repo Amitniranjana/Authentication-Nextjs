@@ -1,16 +1,12 @@
-import mongoose, { Schema, models, model } from "mongoose";
+import mongoose from "mongoose"; // ✅ Default import zaroori hai
 
-const userSchema = new Schema(
+const userSchema = new mongoose.Schema(
   {
-    userName: {
+    username: {
       type: String,
       required: [true, "Username is required"],
       unique: true,
       trim: true,
-    },
-    password: {
-      type: String,
-      required: [true, "Please enter the password"],
     },
     email: {
       type: String,
@@ -18,6 +14,10 @@ const userSchema = new Schema(
       unique: true,
       lowercase: true,
       trim: true,
+    },
+    password: {
+      type: String,
+      required: [true, "Please enter the password"],
     },
     forgotPasswordToken: String,
     forgotPasswordTokenExpiry: Date,
@@ -29,7 +29,7 @@ const userSchema = new Schema(
   }
 );
 
-
-const User = models.User || model("User", userSchema);
+// ✅ Next.js ke liye Model check (Ab ye sahi chalega)
+const User = mongoose.models.users || mongoose.model("users", userSchema);
 
 export default User;
