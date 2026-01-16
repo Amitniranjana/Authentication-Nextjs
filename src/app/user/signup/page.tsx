@@ -3,6 +3,7 @@ import React, { useState, ChangeEvent, FormEvent } from "react";
 // If you are using Next.js, you might want to import Link
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 export default function SignupPage() {
     const router = useRouter();
     const [user, setUser] = useState({
@@ -26,13 +27,9 @@ export default function SignupPage() {
 
         // Simulate API call
         console.log("Signup Data:", user);
-        const response = await fetch("/api/user/signup", {
-            method: "POST",
-            body: JSON.stringify(user)
+        const response = await axios.post("/api/user/signup", user);
 
-        });
-        const responseData=await response.json();
-console.log(responseData);
+console.log(response);
         if (response) {
             router.push("/user/login")
         }

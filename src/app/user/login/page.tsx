@@ -1,20 +1,20 @@
 "use client";
+
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import Link from "next/link";
-
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
+    const router = useRouter();
+    const [loading, setLoading] = useState(false);
 
-
-    // State for Login (Only Email & Password needed)
     const [user, setUser] = useState({
         email: "",
         password: "",
     });
 
-    const [loading, setLoading] = useState(false);
-
-    // Universal Handle Change
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setUser((prev) => ({ ...prev, [name]: value }));
@@ -22,9 +22,32 @@ export default function LoginPage() {
 
     const onLogin = async (e: FormEvent) => {
         e.preventDefault();
-        setLoading(true);
+
+        try {
+            setLoading(true);
+
+            // 1. ADDED 'await' here
+            const response = await axios.post("/api/user/login",user);
+
+            // 2. Parse the JSON
 
 
+            // 3. Check if the login was actually successful
+            if (response) { // Assuming your backend sends { success: true }
+                console.log("Login Success", response);
+                toast.success("login successfully")
+                router.push("/profile");
+            } else {
+                // If password was wrong
+                console.log("Login Failed:", response);
+                alert(response); // Show error to user
+            }
+
+        } catch (error: any) {
+            console.log("Login failed", error.message);
+        } finally {
+            setLoading(false); // Stop loading spinner in both success or error
+        }
     };
 
     return (

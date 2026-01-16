@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 export default async function connect() {
     try {
+
         // 1. Check if already connected to avoid multiple connections
         if (mongoose.connections.length > 0) {
             const connectionState = mongoose.connections[0].readyState;
@@ -10,13 +11,13 @@ export default async function connect() {
                 return;
             }
         }
-const MONGO_URI = "mongodb+srv://dbUser:N8TPViRJSGkGq0tl@authentication.fvt6pjx.mongodb.net/?appName=Authentication"
-        
-        // 2. Connect
-        await mongoose.connect(MONGO_URI);
+if (!process.env.MONGO_URI) {
+    throw new Error("Please add your Mongo URI to .env file");
+}
+      await mongoose.connect(process.env.MONGO_URI);
         const connection = mongoose.connection;
 
-        // 3. Listeners (Use 'connected', not 'connect')
+
         connection.on("connected", () => {
             console.log("MongoDB connected successfully");
         });
