@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
         // 5. Response return karein
         return NextResponse.json({
             message: "User found",
-            data: user
+            userData: user
         })
 
     } catch (error: any) {

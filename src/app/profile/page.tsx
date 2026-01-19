@@ -3,11 +3,12 @@ import axios from "axios"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation" // 1. Router import karein
 
+import { useState } from "react";
 // React components ka naam hamesha Capital letter se start hona chahiye
 export default function ProfilePage() {
 
     const router = useRouter() // 2. Router initialize karein
-
+const [username , setUsername]=useState("");
     async function logoutFn() {
         try {
             // URL ke aage '/' lagayein taaki root se call ho
@@ -24,6 +25,17 @@ export default function ProfilePage() {
             toast.error(error.message || "Problem in logout");
         }
     }
+    const getUserDetail = async()=>{
+        try{
+
+const res=await axios.get("/api/user/me");
+console.log(res.data.userData.username);
+setUsername(res.data.userData.username);
+        }catch(err:any){
+console.error(err.message);
+throw new Error(err.message)
+        }
+    }
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen py-2">
@@ -37,6 +49,16 @@ export default function ProfilePage() {
             >
                 Logout
             </button>
+            <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                onClick={getUserDetail}
+            >
+                get user detail
+                {username==="" ? "":<button>{username}
+            </button>
+}
+</button>
+
         </div>
     )
 }
