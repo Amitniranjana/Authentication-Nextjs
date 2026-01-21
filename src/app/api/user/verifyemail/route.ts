@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
             })
         }
      if (user) {
-    user.isVerified = true;
+    user.isVerify = true;
     user.verifyToken = undefined;
     user.verifyTokenExpiry = undefined;
     await user.save();
